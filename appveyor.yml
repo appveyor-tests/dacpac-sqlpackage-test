@@ -1,0 +1,27 @@
+environment:
+  TEST_CONNECTION_STRING: Server=(local)\SQL2014;Database=MyDatabase_test;User ID=sa;Password=Password12!
+
+install:
+#- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.2 Tools\gacutil.exe" /i "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\140\Microsoft.SqlServer.TransactSql.ScriptDom.dll"'
+- where sqlpackage
+
+services:
+  - mssql2014
+
+# deploy .dacpac package to local SQL Server instance for integration testing
+after_build:
+  - '"C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:dbDacFx="%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" -dest:dbDacFx="%TEST_CONNECTION_STRING%",dacpacAction=Deploy,CreateNewDatabase=True'
+
+# make sure tables have been created
+test_script:
+  - ps: |
+        $conn = New-Object System.Data.SqlClient.SqlConnection
+        $conn.ConnectionString = $env:TEST_CONNECTION_STRING
+        $conn.Open()
+        $cmd = New-Object System.Data.SqlClient.SqlCommand("SELECT * FROM information_schema.tables", $conn)
+        $reader = $cmd.ExecuteReader()
+        while($reader.Read())
+        {
+          Write-Host "Table: $($reader["table_name"])"
+        }
+        $conn.Close()
