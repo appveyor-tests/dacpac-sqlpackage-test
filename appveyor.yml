@@ -12,7 +12,18 @@ services:
 after_build:
 #  - '"C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:dbDacFx="%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" -dest:dbDacFx="%TEST_CONNECTION_STRING%",dacpacAction=Deploy,CreateNewDatabase=True'
 - del MyDatabase\bin\Debug\master.dacpac
-- 'sqlpackage /Action:Publish /SourceFile:"%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" /TargetConnectionString:"%TEST_CONNECTION_STRING%"'
+- dir MyDatabase\bin\Debug\master.dacpac
+#- 'sqlpackage /Action:Publish /SourceFile:"%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" /TargetConnectionString:"%TEST_CONNECTION_STRING%"'
+
+artifacts:
+- path: MyDatabase\bin\Debug\MyDatabase.dacpac
+  name: test
+  
+deploy:
+- provider: SqlDatabase
+  artifact: test
+  connection_string:
+    secure: HhVwH7/gCA5MjuQrzQuy6HO2qpp+0/Njha0bzaC6kWS5gThWKTvwOP20wykN0XwoH9dA2FX4F6ob2bLjuLzuVSvGZb4Ue14yP8qhUDQmZZM=
 
 # make sure tables have been created
 test_script:
