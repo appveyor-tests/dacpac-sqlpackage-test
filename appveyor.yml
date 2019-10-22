@@ -10,10 +10,7 @@ services:
 
 # deploy .dacpac package to local SQL Server instance for integration testing
 after_build:
-#  - '"C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:dbDacFx="%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" -dest:dbDacFx="%TEST_CONNECTION_STRING%",dacpacAction=Deploy,CreateNewDatabase=True'
-#- del MyDatabase\bin\Debug\master.dacpac
-#- dir MyDatabase\bin\Debug\master.dacpac
-#- 'sqlpackage /Action:Publish /SourceFile:"%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" /TargetConnectionString:"%TEST_CONNECTION_STRING%"'
+- del MyDatabase\bin\Debug\master.dacpac
 
 artifacts:
 - path: MyDatabase\bin\Debug\MyDatabase.dacpac
@@ -26,7 +23,7 @@ deploy:
     secure: HhVwH7/gCA5MjuQrzQuy6HO2qpp+0/Njha0bzaC6kWS5gThWKTvwOP20wykN0XwoH9dA2FX4F6ob2bLjuLzuVSvGZb4Ue14yP8qhUDQmZZM=
 
 # make sure tables have been created
-test_script:
+on_success:
   - ps: |
         $conn = New-Object System.Data.SqlClient.SqlConnection
         $conn.ConnectionString = $env:TEST_CONNECTION_STRING
