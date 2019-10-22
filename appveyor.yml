@@ -11,7 +11,7 @@ services:
 # deploy .dacpac package to local SQL Server instance for integration testing
 after_build:
 #  - '"C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:dbDacFx="%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" -dest:dbDacFx="%TEST_CONNECTION_STRING%",dacpacAction=Deploy,CreateNewDatabase=True'
-- dir MyDatabase\bin\Debug
+- del MyDatabase\bin\Debug\master.dacpac
 - 'sqlpackage /Action:Publish /SourceFile:"%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" /TargetConnectionString:"%TEST_CONNECTION_STRING%"'
 
 # make sure tables have been created
