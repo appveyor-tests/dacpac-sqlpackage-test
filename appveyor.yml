@@ -1,14 +1,9 @@
 environment:
-  TEST_CONNECTION_STRING: Server=(local)\SQL2014;Database=MyDatabase_test;User ID=sa;Password=Password12!
-
-install:
-#- '"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.2 Tools\gacutil.exe" /i "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\140\Microsoft.SqlServer.TransactSql.ScriptDom.dll"'
-- where sqlpackage
+  TEST_CONNECTION_STRING: Server=(local)\SQL2017;Database=MyDatabase_test;User ID=sa;Password=Password12!
 
 services:
-  - mssql2014
+  - mssql2017
 
-# deploy .dacpac package to local SQL Server instance for integration testing
 after_build:
 - del MyDatabase\bin\Debug\master.dacpac
 
@@ -19,8 +14,7 @@ artifacts:
 deploy:
 - provider: SqlDatabase
   artifact: test
-  connection_string:
-    secure: HhVwH7/gCA5MjuQrzQuy6HO2qpp+0/Njha0bzaC6kWS5gThWKTvwOP20wykN0XwoH9dA2FX4F6ob2bLjuLzuVSvGZb4Ue14yP8qhUDQmZZM=
+  connection_string: $(TEST_CONNECTION_STRING)
 
 # make sure tables have been created
 on_success:
