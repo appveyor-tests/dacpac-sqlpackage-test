@@ -4,12 +4,14 @@ environment:
 services:
   - mssql2017
 
-after_build:
-- del MyDatabase\bin\Debug\master.dacpac
+#after_build:
+#- del MyDatabase\bin\Debug\master.dacpac
 
 artifacts:
 - path: MyDatabase\bin\Debug\MyDatabase.dacpac
-  name: test
+  name: MyDatabase
+- path: MyDatabase\bin\Debug\master.dacpac
+  name: master
   
 deploy:
 - provider: SqlDatabase
