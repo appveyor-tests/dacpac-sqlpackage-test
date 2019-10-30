@@ -15,7 +15,7 @@ artifacts:
   
 deploy:
 - provider: SqlDatabase
-  artifact: test
+  artifact: MyDatabase
   connection_string: $(TEST_CONNECTION_STRING)
 
 # make sure tables have been created
