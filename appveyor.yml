@@ -1,5 +1,5 @@
 environment:
-  TEST_CONNECTION_STRING: Server=(local)\SQL2019;Database=MyDatabase_test;User ID=sa;Password=Password12!
+  TEST_CONNECTION_STRING: Server=(local)\SQL2019;Database=MyDatabase_test;User ID=sa;Password=Password12!;TrustServerCertificate=true
 
 install:
 #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
