@@ -14,9 +14,9 @@ install:
 # deploy .dacpac package to local SQL Server instance for integration testing
 after_build:
 #  - '"C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:dbDacFx="%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" -dest:dbDacFx="%TEST_CONNECTION_STRING%",dacpacAction=Deploy,CreateNewDatabase=True'
-- 'sqlpackage /Action:Publish /SourceFile:"%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" /TargetConnectionString:"%TEST_CONNECTION_STRING%"'
+- 'sqlpackage /Action:Publish /SourceFile:"%appveyor_build_folder%\MyDatabase\bin\Debug\MyDatabase.dacpac" /TargetTrustServerCertificate:True /TargetConnectionString:"%TEST_CONNECTION_STRING%"'
 
-# make sure tables have been created
+# make sure tables have been created 
 test_script:
   - ps: |
         $conn = New-Object System.Data.SqlClient.SqlConnection
